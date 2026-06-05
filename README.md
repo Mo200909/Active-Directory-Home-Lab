@@ -77,25 +77,6 @@ All accounts successfully authenticated against DC01, confirming credential vali
 
 ---
 
-## Screenshots
-
-### SMB Credential Validation (Kali Linux)
-![NetExec SMB scan](screenshots/nxc_smb.png)
-
-### IT_Admins Group Members
-![AD Group](screenshots/it_admins_group.png)
-
-### Group Policy — Account Lockout Settings
-![GPO Settings](screenshots/gpo_lockout.png)
-
-### GPO Applied via gpupdate /force
-![gpupdate](screenshots/gpupdate.png)
-
-### Static IP Configuration on DC01
-![IP Config](screenshots/ip_config.png)
-
----
-
 ## What I Learned
 
 - How to promote a Windows Server to a Domain Controller and configure a domain from scratch
