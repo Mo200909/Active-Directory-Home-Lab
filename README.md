@@ -20,10 +20,10 @@ A virtualized cybersecurity home lab simulating a real-world enterprise Windows 
 ## Lab Architecture
 
 - **Domain:** lab.local
-- **Domain Controller:** DC01 — 10.0.0.200
-- **Subnet:** 255.255.255.0
-- **Default Gateway:** 10.0.0.1
-- **DNS:** 127.0.0.1 (loopback for AD resolution)
+- **Domain Controller:** DC01 — <DC-IP>
+- **Subnet:** <SUBNET-MASK>
+- **Default Gateway:** <GATEWAY-IP>
+- **DNS:** <DNS-IP> (loopback for AD resolution)
 - **Attacker Machine:** Kali Linux on the same subnet
 
 ---
@@ -67,14 +67,32 @@ Used NetExec (nxc) from Kali Linux to perform SMB credential validation against 
 ### Commands Run
 
 ```bash
-nxc smb 10.0.0.200 -u jsmith -p Mofo1234
-nxc smb 10.0.0.200 -u alovelace -p SecureAdmin2026!
-nxc smb 10.0.0.200 -u ltorvalds -p SecureAdmin2026!
-nxc smb 10.0.0.200 -u ghopper -p SecureAdmin2026!
+nxc smb <DC-IP> -u jsmith -p Mofo1234
+nxc smb <DC-IP> -u alovelace -p SecureAdmin2026!
+nxc smb <DC-IP> -u ltorvalds -p SecureAdmin2026!
+nxc smb <DC-IP> -u ghopper -p SecureAdmin2026!
 ```
 
 All accounts successfully authenticated against DC01, confirming credential validity and SMB signing status.
 
+---
+
+## Screenshots
+
+### SMB Credential Validation (Kali Linux)
+![NetExec SMB scan](screenshots/nxc_smb.png)
+
+### IT_Admins Group Members
+![AD Group](screenshots/it_admins_group.png)
+
+### Group Policy — Account Lockout Settings
+![GPO Settings](screenshots/gpo_lockout.png)
+
+### GPO Applied via gpupdate /force
+![gpupdate](screenshots/gpupdate.png)
+
+### Static IP Configuration on DC01
+![IP Config](screenshots/ip_config.png)
 
 ---
 
