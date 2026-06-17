@@ -67,10 +67,10 @@ Used NetExec (nxc) from Kali Linux to perform SMB credential validation against 
 ### Commands Run
 
 ```bash
-nxc smb <DC-IP> -u jsmith -p Mofo1234
-nxc smb <DC-IP> -u alovelace -p SecureAdmin2026!
-nxc smb <DC-IP> -u ltorvalds -p SecureAdmin2026!
-nxc smb <DC-IP> -u ghopper -p SecureAdmin2026!
+nxc smb <DC-IP> -u jsmith -p [REDACTED]
+nxc smb <DC-IP> -u alovelace -p [REDACTED]
+nxc smb <DC-IP> -u ltorvalds -p [REDACTED]
+nxc smb <DC-IP> -u ghopper -p [REDACTED]
 ```
 
 All accounts successfully authenticated against DC01, confirming credential validity and SMB signing status.
