@@ -1,91 +1,53 @@
 # Active Directory Home Lab
 
-A virtualized cybersecurity home lab simulating a real-world enterprise Windows environment. Built to practice Active Directory administration, Group Policy hardening, network configuration, and offensive reconnaissance using Kali Linux.
+A small home lab built to practice setting up and securing a Windows domain, then testing it like an attacker would.
 
----
+## Setup
 
-## Tools & Technologies
+| What | Used |
+|---|---|
+| Server | Windows Server 2022 |
+| Attacker machine | Kali Linux |
+| Domain | lab.local |
+| Domain controller | DC01 |
 
-| Category | Tools |
-|----------|-------|
-| Server OS | Windows Server 2022 |
-| Attacker OS | Kali Linux |
-| AD Management | Active Directory Users & Computers |
-| Policy Management | Group Policy Management Editor |
-| Offensive Tool | NetExec (nxc) |
-| Protocol | SMB (Port 445) |
+## What I built
 
----
+**4 user accounts** in an OU called `HQ`:
+- Ada Lovelace
+- Grace Hopper
+- John Smith
+- Linus Torvalds
 
-## Lab Architecture
+**A lockout policy** through Group Policy:
+- 5 failed logins locks the account
+- Lockout lasts 30 minutes
+- Counter resets after 30 minutes
 
-- **Domain:** lab.local
-- **Domain Controller:** DC01 — <DC-IP>
-- **Subnet:** <SUBNET-MASK>
-- **Default Gateway:** <GATEWAY-IP>
-- **DNS:** <DNS-IP> (loopback for AD resolution)
-- **Attacker Machine:** Kali Linux on the same subnet
+Path in GPO: Computer Configuration → Policies → Windows Settings → Security Settings → Account Policies → Account Lockout Policy
 
----
+Applied it domain-wide with `gpupdate /force`.
 
-## Active Directory Configuration
+## Testing it like an attacker
 
-### IT_Admins Group Members
-
-| Name | OU |
-|------|----|
-| Ada Lovelace | lab.local/HQ |
-| Grace Hopper | lab.local/HQ |
-| John Smith | lab.local/HQ |
-| Linus Torvalds | lab.local/HQ |
-
----
-
-## Group Policy Hardening
-
-Applied via Security_AccountLockout Policy under:
-`Computer Configuration > Policies > Windows Settings > Security Settings > Account Policies > Account Lockout Policy`
-
-| Policy | Setting |
-|--------|---------|
-| Account lockout threshold | 5 invalid logon attempts |
-| Account lockout duration | 30 minutes |
-| Reset account lockout counter after | 30 minutes |
-
-Policy was applied domain-wide using:
+Used NetExec (nxc) from Kali to check if the accounts could authenticate over SMB — basically simulating how an attacker would try to validate stolen or guessed credentials.
 
 ```
-gpupdate /force
+nxc smb <DC-IP> -u jsmith -p [password]
+nxc smb <DC-IP> -u alovelace -p [password]
+nxc smb <DC-IP> -u ltorvalds -p [password]
+nxc smb <DC-IP> -u ghopper -p [password]
 ```
 
----
+All 4 accounts authenticated successfully, and SMB signing came back enabled — meaning the domain controller is protected against relay attacks.
 
-## Offensive Reconnaissance
+## What I learned
 
-Used NetExec (nxc) from Kali Linux to perform SMB credential validation against the domain controller, simulating attacker enumeration of domain accounts.
-
-### Commands Run
-
-```bash
-nxc smb <DC-IP> -u jsmith -p [REDACTED]
-nxc smb <DC-IP> -u alovelace -p [REDACTED]
-nxc smb <DC-IP> -u ltorvalds -p [REDACTED]
-nxc smb <DC-IP> -u ghopper -p [REDACTED]
-```
-
-All accounts successfully authenticated against DC01, confirming credential validity and SMB signing status.
-
----
-
-## What I Learned
-
-- How to promote a Windows Server to a Domain Controller and configure a domain from scratch
-- How to create and manage Active Directory users, groups, and OUs
-- How to write and enforce Group Policy Objects (GPOs) for account security
-- How attackers use tools like NetExec to enumerate and validate credentials over SMB
-- How to configure static IP and DNS settings for stable AD name resolution
-
----
+- How to stand up a domain controller from scratch
+- How to create and organize AD users, groups, and OUs
+- How to write and enforce a GPO
+- How attackers use tools like NetExec to test stolen credentials
+- How to set up static IP/DNS so AD name resolution actually works
 
 ## Author
 
