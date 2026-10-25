@@ -1,6 +1,6 @@
 # Active Directory Home Lab
 
-A small home lab built to practice setting up and securing a Windows domain, then testing it like an attacker would.
+A small home lab built to practice setting up and securing a Windows domain, then testing it from an attacker's perspective.
 
 ## Setup
 
@@ -28,9 +28,9 @@ Path in GPO: Computer Configuration → Policies → Windows Settings → Securi
 
 Applied it domain-wide with `gpupdate /force`.
 
-## Testing it like an attacker
+## Testing from the attacker's side
 
-Used NetExec (nxc) from Kali to check if the accounts could authenticate over SMB — basically simulating how an attacker would try to validate stolen or guessed credentials.
+Used NetExec (nxc) from Kali to check whether the accounts could authenticate over SMB, which simulates how an attacker validates stolen or guessed credentials.
 
 ```
 nxc smb <DC-IP> -u jsmith -p [password]
@@ -39,15 +39,17 @@ nxc smb <DC-IP> -u ltorvalds -p [password]
 nxc smb <DC-IP> -u ghopper -p [password]
 ```
 
-All 4 accounts authenticated successfully, and SMB signing came back enabled — meaning the domain controller is protected against relay attacks.
+Results:
+- All 4 accounts authenticated successfully over SMB.
+- SMB signing was reported as enabled, which mitigates SMB relay attacks against the domain controller.
 
 ## What I learned
 
 - How to stand up a domain controller from scratch
 - How to create and organize AD users, groups, and OUs
 - How to write and enforce a GPO
-- How attackers use tools like NetExec to test stolen credentials
-- How to set up static IP/DNS so AD name resolution actually works
+- How attackers use tools like NetExec to validate credentials
+- How to set up static IP/DNS so AD name resolution works
 
 ## Author
 
